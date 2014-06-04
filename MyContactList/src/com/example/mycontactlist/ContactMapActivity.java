@@ -8,6 +8,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -22,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -151,6 +153,15 @@ public class ContactMapActivity extends FragmentActivity {
 		    }
 		}
 		
+		googleMap.setOnMyLocationChangeListener(new OnMyLocationChangeListener(){
+			@Override
+			public void onMyLocationChange(Location location){
+				LatLngBounds.Builder builder = new LatLngBounds.Builder();
+				LatLng point = new LatLng(location.getLatitude(),location.getLongitude());
+				builder.include(point);			
+				googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point,18));
+			}
+		});		
 
 	}
 
